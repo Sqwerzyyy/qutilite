@@ -1,5 +1,6 @@
 #include "TerminalVisualizer.hpp"
 
+#include <array>
 #include <cstddef>
 #include <cmath>
 #include <iomanip>
@@ -15,6 +16,7 @@ constexpr std::string_view Cyan = "\033[36m";
 constexpr std::string_view Green = "\033[32m";
 constexpr std::string_view Yellow = "\033[33m";
 constexpr std::string_view Red = "\033[31m";
+constexpr std::string_view Purple = "\033[95m";
 constexpr std::string_view Bold = "\033[1m";
 
 std::string money(double value) {
@@ -71,12 +73,47 @@ void row(std::ostream& out, std::string_view label, const std::string& value, st
         << Cyan << '|' << Reset << '\n';
 }
 
+void bannerBorder(std::ostream& out, std::size_t width) {
+    out << Purple << '+'
+        << std::string(width + 2U, '-')
+        << '+'
+        << Reset << '\n';
+}
+
+void bannerLine(std::ostream& out, std::string_view text, std::size_t width) {
+    out << Purple << '|' << Reset << ' '
+        << Bold << Purple << std::left << std::setw(static_cast<int>(width)) << text << Reset << ' '
+        << Purple << '|' << Reset << '\n';
+}
+
+void printBanner(std::ostream& out) {
+    constexpr std::size_t width = 78;
+    constexpr std::array<std::string_view, 8> lines = {
+        "   ####   ##   ##  ########  ####  ##        ####  ########  ########",
+        "  ##  ##  ##   ##     ##      ##   ##         ##      ##     ##      ",
+        "  ##  ##  ##   ##     ##      ##   ##         ##      ##     ######  ",
+        "  ##  ##  ##   ##     ##      ##   ##         ##      ##     ##      ",
+        "   #####   #####      ##     ####  ########  ####     ##     ########",
+        "       ##                                                               ",
+        "  GitHub : https://github.com/Sqwerzyyy",
+        "  Repo   : https://github.com/Sqwerzyyy/qutilite"
+    };
+
+    bannerBorder(out, width);
+    for (std::string_view line : lines) {
+        bannerLine(out, line, width);
+    }
+    bannerBorder(out, width);
+    out << '\n';
+}
+
 }  // namespace
 
 void TerminalVisualizer::print(const SimulationResult& result, std::ostream& out) const {
     constexpr int labelWidth = 30;
     constexpr int valueWidth = 26;
 
+    printBanner(out);
     border(out, labelWidth, valueWidth);
     row(out, "qutilite", "Monte Carlo GBM", Bold, labelWidth, valueWidth);
     border(out, labelWidth, valueWidth);

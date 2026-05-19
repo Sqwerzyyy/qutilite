@@ -9,7 +9,7 @@
 int main(int argc, char** argv) {
     qutilite::SimulationConfig config;
 
-    CLI::App app{"qutilite high-performance local Monte Carlo simulator"};
+    CLI::App app{"qutilite high-performance C++20 local Monte Carlo simulator"};
     app.require_subcommand(1);
 
     auto addCoreOptions = [&](CLI::App& command) {
